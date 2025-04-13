@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { providerMap, signIn } from "@/auth";
 import { Button } from "@mantine/core";
+import { Icons } from "@/components/icons";
 // import { AuthError } from "next-auth";
 // import { redirect } from "next/navigation";
 
@@ -14,12 +15,14 @@ export default async function LoginPage(props: {
       <Image
         src="/icon/dark-full.svg"
         alt="icon"
-        width={200}
-        height={200}
+        width={250}
+        height={250}
         className="py-5"
       />
-      <div className="p-8 border rounded shadow-md">
-        <h1 className="text-2xl font-bold mb-4 text-center">Login</h1>
+      <div className="py-8 px-20 rounded-2xl shadow-lg shadow-white bg-dark-900">
+        <h1 className="text-3xl font-bold mb-7 text-center text-white">
+          Login
+        </h1>
         {Object.values(providerMap).map((provider) => (
           <form
             key={provider.id}
@@ -38,8 +41,12 @@ export default async function LoginPage(props: {
               }
             }}
           >
-            <Button type="submit">
-              <span>Sign in with {provider.name}</span>
+            <Button
+              leftSection={<Icons IconName={provider.name} />}
+              type="submit"
+              className="w-full my-2 bg-dark-900 hover:bg-dark-800 border border-white shadow-lg shadow-white"
+            >
+              <span>Login with {provider.name}</span>
             </Button>
           </form>
         ))}
