@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Header } from "@/components/layouts/header";
 import {
   ColorSchemeScript,
   mantineHtmlProps,
