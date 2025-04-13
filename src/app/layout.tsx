@@ -24,11 +24,11 @@ export default function RootLayout({
   return (
     <html lang="ja" {...mantineHtmlProps}>
       <head>
-        <ColorSchemeScript />
+        {/* NOTE: Temporarily,theme is dark only. I'll add theme change btn. */}
+        <ColorSchemeScript defaultColorScheme="dark" />
       </head>
       <body className="antialiased">
-        <MantineProvider theme={theme}>
-          <Header />
+        <MantineProvider theme={theme} defaultColorScheme="dark">
           {children}
         </MantineProvider>
       </body>
