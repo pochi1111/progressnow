@@ -1,7 +1,6 @@
 import NextAuth from "next-auth";
 import GitHub from "next-auth/providers/github";
 import type { Provider } from "next-auth/providers";
-
 const providers: Provider[] = [GitHub];
 
 export const providerMap = providers
@@ -27,10 +26,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     signIn: "/auth/login",
   },
   callbacks: {
-    async signIn({ user }) {
-      const id = user.id;
-      // userを変更すれば後々のsessionにも適用できるけど、後々変更されたときにそれが適用されない可能性があるから毎回毎回取ってきた方がいいかも
-      //ここでアカウントが存在するかどうかを確認して、ないならば作成させる
+    async signIn() {
       return true;
     },
     jwt({ token, user }) {
@@ -46,11 +42,25 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async session({ session, token }) {
       if (token) {
         session.user.id = token.id as string;
-        session.user.email = token.email as string;
-        session.user.name = token.name as string;
-        session.user.image = token.picture as string;
+        console.log("lets fetch user data from API");
+        const url = `http://${process.env.API_SERVER_URL}:8000/users/${token.id}`;
+        const response = await fetch(url);
+        if (response.status === 200) {
+          const user = await response.json();
+          session.user.email = user.email as string;
+          session.user.name = user.name as string;
+        } else if (response.status === 404) {
+          //user not found , so redirect to signup page
+        } else {
+          console.error("Error fetching user data:", response.statusText);
+        }
       }
       return session;
+    },
+  },
+  events: {
+    async signOut() {
+      // ログアウト時の処理をここに追加できます
     },
   },
 });

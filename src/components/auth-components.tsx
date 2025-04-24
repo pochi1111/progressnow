@@ -7,5 +7,5 @@ export function LogIn() {
 }
 
 export function LogOut() {
-  return <Button onClick={() => signOut()}>LogOut</Button>;
+  return <Button onClick={() => signOut({ callbackUrl: "/" })}>LogOut</Button>;
 }
