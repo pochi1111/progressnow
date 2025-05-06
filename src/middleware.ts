@@ -19,22 +19,32 @@ export default auth(async (req: NextRequest) => {
     );
   }
 
-  if (req.nextUrl.pathname === "/auth/signup") {
-    return NextResponse.next();
-  }
-
   // 認証済みの場合はアカウントが存在するか確認
-  const userId = session.user.id;
-  const url = `http://${process.env.API_SERVER_URL}:8000/users/${userId}`;
+  const email = session.user.email as string;
+  const url = `http://${process.env.API_SERVER_URL}:8000/users/${email}`;
   const response = await fetch(url);
   if (response.status === 404) {
     // NOTE: callbackUrlを指定させる
-    return NextResponse.redirect(new URL("/auth/signup", req.url));
+    if (req.nextUrl.pathname === "/auth/signup") {
+      return NextResponse.next();
+    }
+    return NextResponse.redirect(
+      new URL(`/auth/signup?callbackUrl=${req.url}`, req.url),
+    );
   } else if (!response.ok) {
     // その他のエラー処理
     console.error("Error fetching user data:", response.statusText);
     return NextResponse.error();
   }
+
+  if (
+    req.nextUrl.pathname === "/auth/login" ||
+    req.nextUrl.pathname === "/auth/signup"
+  ) {
+    // ログイン済みの場合はリダイレクト
+    return NextResponse.redirect(new URL("/app", req.url));
+  }
+
   return NextResponse.next();
 });
 

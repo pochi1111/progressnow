@@ -39,22 +39,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
       return token;
     },
-    async session({ session, token }) {
-      if (token) {
-        session.user.id = token.id as string;
-        console.log("lets fetch user data from API");
-        const url = `http://${process.env.API_SERVER_URL}:8000/users/${token.id}`;
-        const response = await fetch(url);
-        if (response.status === 200) {
-          const user = await response.json();
-          session.user.email = user.email as string;
-          session.user.name = user.name as string;
-        } else if (response.status === 404) {
-          //user not found , so redirect to signup page
-        } else {
-          console.error("Error fetching user data:", response.statusText);
-        }
-      }
+    async session({ session }) {
       return session;
     },
   },
