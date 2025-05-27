@@ -22,8 +22,10 @@ export default auth(async (req: NextRequest) => {
   // 認証済みの場合はアカウントが存在するか確認
   const email = session.user.email as string;
   const url = `http://${process.env.API_SERVER_URL}:8000/users/${email}`;
-  const response = await fetch(url);
-  if (response.status === 404) {
+  console.log("url", url);
+  try {
+    const response = await fetch(url);
+    if (response.status === 404) {
     // NOTE: callbackUrlを指定させる
     if (req.nextUrl.pathname === "/auth/signup") {
       return NextResponse.next();
@@ -34,6 +36,10 @@ export default auth(async (req: NextRequest) => {
   } else if (!response.ok) {
     // その他のエラー処理
     console.error("Error fetching user data:", response.statusText);
+    return NextResponse.error();
+  }
+  } catch (error) {
+    console.error("Error fetching user data:", error);
     return NextResponse.error();
   }
 
