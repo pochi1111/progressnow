@@ -7,7 +7,9 @@ export function Header() {
   return (
     <header>
       <div className={classes.header}>
+        <Link href="/" className={classes.logo}>
         <Image src="/icon/dark-full.svg" alt="icon" width={250} height={250} />
+        </Link>
         <UserButton />
       </div>
     </header>

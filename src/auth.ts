@@ -40,6 +40,19 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return token;
     },
     async session({ session }) {
+      const email = session.user.email as string;
+      const url = `http://${process.env.API_SERVER_URL}:8000/users/email/${email}`;
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error("Failed to fetch user data");
+        }
+        const userData = await response.json();
+        session.user.id = userData.id;
+        session.user.email = userData.email;
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
       return session;
     },
   },

@@ -16,12 +16,12 @@ export default auth(async (req: NextRequest) => {
     console.log("not authenticated");
     return NextResponse.redirect(
       new URL(`/auth/login?callbackUrl=${req.url}`, req.url),
-    );
+    );  
   }
 
   // 認証済みの場合はアカウントが存在するか確認
   const email = session.user.email as string;
-  const url = `http://${process.env.API_SERVER_URL}:8000/users/${email}`;
+  const url = `http://${process.env.API_SERVER_URL}:8000/users/email/${email}`;
   console.log("url", url);
   try {
     const response = await fetch(url);
