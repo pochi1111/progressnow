@@ -1,7 +1,8 @@
 import React from "react";
 import { auth } from "@/auth";
-import { Title, Box, Alert, Button, Group, Stack, Card } from "@mantine/core";
-import { IconInfoCircle, IconPlus, IconEdit } from "@tabler/icons-react";
+import { Title, Box, Alert, Group, Stack, Card } from "@mantine/core";
+import { IconInfoCircle } from "@tabler/icons-react";
+import { CreateProjectButton } from "@/components/ui/creatProjectButton";
 
 async function fetchUserData(email: string) {
   const userUrl = `http://${process.env.API_SERVER_URL}:8000/users/email/${email}`;
@@ -53,13 +54,7 @@ export default async function AppPage() {
     <Box p="20px">
       <Group justify="space-between" mb="md">
         <Title order={1}>リスト</Title>
-        <Button
-          component="a"
-          href="/project/create"
-          leftSection={<IconPlus size={16} />}
-        >
-          新しいリスト
-        </Button>
+        <CreateProjectButton />
       </Group>
       {projects.length === 0 ? (
         <Alert>
@@ -68,13 +63,7 @@ export default async function AppPage() {
             <span>リストがありません。新しいリストを作成してください。</span>
           </Group>
           <Box mt="md" py="md">
-            <Button
-              component="a"
-              href="/project/create"
-              leftSection={<IconPlus size={16} />}
-            >
-              新しいリストを作成
-            </Button>
+            <CreateProjectButton />
           </Box>
         </Alert>
       ) : (
