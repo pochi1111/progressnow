@@ -1,8 +1,8 @@
 import { auth } from "@/auth";
 
 interface TodoItem {
-  id: Number;
-  project_id: Number;
+  id: number;
+  project_id: number;
   title: string;
   description?: string;
   due_date?: string | null;
@@ -55,7 +55,7 @@ export default async function ProjectPage(props: { params: { id: string } }) {
       return (
         <div>
           <h1>情報の取得に失敗しました</h1>
-          <p>後ほど再試行してください。</p>
+          <p>URLが正しいことを確認し、後ほど再試行してください。</p>
         </div>
       );
     }
